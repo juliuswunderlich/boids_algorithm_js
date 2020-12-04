@@ -105,9 +105,10 @@ function move_boids() {
 
     v1 = enforceRuleOne(boid)
     v2 = enforceRuleTwo(boid, 3)
+    v3 = enforceRuleThree(boid)
 
-    boid.velocity[0] = boid.velocity[0] + v1[0] + v2[0]
-    boid.velocity[1] = boid.velocity[1] + v1[1] + v2[1]
+    boid.velocity[0] = boid.velocity[0] + v1[0] + v2[0] + v3[0]
+    boid.velocity[1] = boid.velocity[1] + v1[1] + v2[1] + v3[1]
 
 
 
@@ -136,7 +137,7 @@ function move_boids() {
 
 // Rule 1: Boids try to fly towards the centre of mass of neighbouring boids.
 function enforceRuleOne(boid) {
-  // "perceived center"
+  // pc: "perceived center"
   pc = calcRelCenterMass(boid)
   for (let b of boidList) {
     if (b !== boid) {
@@ -169,6 +170,28 @@ function enforceRuleTwo(boid, minDist) {
   return c
 }
 
+// Rule 3: Boids try to match velocity with near boids
+function enforceRuleThree(boid) {
+  // pv: "perceived velocity"
+  pv = calcRelMeanVelocity(boid)
+
+  for (let b of boidList) {
+    if (b !== boid) {
+      pv[0] = pv[0] + b.velocity[0]
+      pv[1] = pv[1] + b.velocity[1]
+    }
+  }
+  pv[0] = pv[0] / (boidList.length - 1)
+  pv[1] = pv[1] / (boidList.length - 1)
+  console.log(pv)
+
+  // divide difference to speed them up smoothly
+  dvx = (pv[0] - boid.velocity[0]) / 8000
+  dvy = (pv[1] - boid.velocity[1]) / 8000
+
+  return [dvx, dvy]
+}
+
 
 
 /* calculates average x and y of all boids (except the passed one, to achieve
@@ -188,6 +211,21 @@ function calcRelCenterMass(boid) {
 
   return [avg_x, avg_y]
 }
+
+function calcRelMeanVelocity(boid) {
+  let avg_x = 0
+  let avg_y = 0
+  for (let b of boidList) {
+    if (b === boid) {continue} 
+    avg_x += b.velocity[0]
+    avg_y += b.velocity[1]
+  }
+  avg_x /= (boidList.length - 1)
+  avg_y /= (boidList.length - 1)
+
+  return [avg_x, avg_y]
+}
+
 
 
 // calc euclidean distance
