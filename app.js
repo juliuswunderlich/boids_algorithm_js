@@ -104,7 +104,7 @@ function move_boids() {
     let height = boid.height
 
     v1 = enforceRuleOne(boid)
-    v2 = enforceRuleTwo(boid, 1)
+    v2 = enforceRuleTwo(boid, 3)
 
     boid.velocity[0] = boid.velocity[0] + v1[0] + v2[0]
     boid.velocity[1] = boid.velocity[1] + v1[1] + v2[1]
