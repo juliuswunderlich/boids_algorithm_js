@@ -105,9 +105,10 @@ function move_boids() {
     let height = boid.height
 
     v1 = enforceRuleOne(boid)
+    v2 = enforceRuleTwo(boid, 10)
 
-    boid.velocity[0] = boid.velocity[0] + v1[0]
-    boid.velocity[1] = boid.velocity[1] + v1[1]
+    boid.velocity[0] = boid.velocity[0] + v1[0] + v2[0]
+    boid.velocity[1] = boid.velocity[1] + v1[1] + v2[1]
 
 
 
@@ -153,6 +154,24 @@ function enforceRuleOne(boid) {
   return [dx, dy]
 }
 
+
+
+// Rule 2: Rule 2: Boids try to keep a small distance away from other objects (including other boids)
+function enforceRuleTwo(boid, minDist) {
+  c = [0,0]
+  for(let b in boidList) {
+    if (b !== boid) {
+      if (calcEuclid(b.position, boid.position) < minDist ) {
+        c[0] = c[0] - (b.position[0] - boid.position[0])
+        c[1] = c[1] - (b.position[1] - boid.position[1])
+      }
+    }
+  }
+  return c
+}
+
+
+
 /* calculates average x and y of all boids (except the passed one, to achieve
  more realistic behavior).
  Returns an array of x and y coordinate
@@ -171,6 +190,16 @@ function calcRelCenterMass(boid) {
   return [avg_x, avg_y]
 }
 
+
+// calc euclidean distance
+function calcEuclid(pos1, pos2) {
+  x1 = pos1[0]
+  x2 = pos1[1]
+  y1 = pos2[0]
+  y2 = pos2[1]
+
+  return Math.sqrt(Math.pow((x1-y1), 2) + Math.pow((x2-y2), 2))
+}
 
 
 
