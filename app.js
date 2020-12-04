@@ -73,7 +73,6 @@ function draw() {
   context.clearRect(0, 0, cvs.width, cvs.height)
   draw_boids()
   move_boids()
-  console.log(calcRelCenterMass(boidList[0]))
 }
 
 // draws all the boids, at their x and y positions
@@ -105,7 +104,7 @@ function move_boids() {
     let height = boid.height
 
     v1 = enforceRuleOne(boid)
-    v2 = enforceRuleTwo(boid, 10)
+    v2 = enforceRuleTwo(boid, 1)
 
     boid.velocity[0] = boid.velocity[0] + v1[0] + v2[0]
     boid.velocity[1] = boid.velocity[1] + v1[1] + v2[1]
@@ -148,9 +147,9 @@ function enforceRuleOne(boid) {
   pc[0] = pc[0] / (boidList.length - 1)
   pc[1] = pc[1] / (boidList.length - 1)
 
-  // divide difference by 100 to move 1% of the way
-  dx = (pc[0] - boid.position[0]) / 100
-  dy = (pc[1] - boid.position[1]) / 100
+  // divide difference by 100 to move .001% of the way
+  dx = (pc[0] - boid.position[0]) / 10000
+  dy = (pc[1] - boid.position[1]) / 10000
   return [dx, dy]
 }
 
@@ -159,7 +158,7 @@ function enforceRuleOne(boid) {
 // Rule 2: Rule 2: Boids try to keep a small distance away from other objects (including other boids)
 function enforceRuleTwo(boid, minDist) {
   c = [0,0]
-  for(let b in boidList) {
+  for(let b of boidList) {
     if (b !== boid) {
       if (calcEuclid(b.position, boid.position) < minDist ) {
         c[0] = c[0] - (b.position[0] - boid.position[0])
