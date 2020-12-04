@@ -19,9 +19,10 @@ Julius Wunderlich
 
 //TODO
 /*
- * Think about how you want to handle vectors.
-    -> let's go raw and use arrays
- * Finish rule 1
+ * Make them face towards their direction of flight
+ * add more triangles
+ * make the area bigger
+ * add buttons to tweak the parameters live
  */
 
 
