@@ -31,12 +31,6 @@ let cvs
 let context
 
 let boidList = []
-let t1, t2, t3
-let c1, c2, c3
-
-
-// average position of all boids
-let globalCenterMass
 
 
 
@@ -55,10 +49,15 @@ function main() {
 // initializes all the objects
 function init() {
   // x and y are starting positions
-  t1 = new Triangle('t1', x = 100, y = 100, width = 60, height = 60, "blue", 2, 1)
-  t2 = new Triangle('t2', x = 200, y = 100, width = 60, height = 60, "purple", 1, 4)
-  t3 = new Triangle('t3', x = 300, y = 100, width = 60, height = 60, "cyan", 5,1)
-  boidList.push(t1,t2,t3)
+  /*
+  t1 = new Triangle('t1', x = 100, y = 100, width = 30, height = 30, "blue", 2, 1)
+  t2 = new Triangle('t2', x = 200, y = 100, width = 30, height = 30, "purple", 1, 4)
+  t3 = new Triangle('t3', x = 300, y = 100, width = 30, height = 30, "cyan", 5,1)
+  */
+  for (let i = 0; i < 50 ; ++i) {
+    t = new Triangle('t' + i, x = 100 + getRandomInt(200), y = 100 + getRandomInt(20), width = 30, height = 30, "cyan", 2, 1 )
+    boidList.push(t)
+  }
 
 
 
@@ -105,7 +104,7 @@ function move_boids() {
     let height = boid.height
 
     v1 = enforceRuleOne(boid)
-    v2 = enforceRuleTwo(boid, 3)
+    v2 = enforceRuleTwo(boid, 2)
     v3 = enforceRuleThree(boid)
 
     boid.velocity[0] = boid.velocity[0] + v1[0] + v2[0] + v3[0]
@@ -149,9 +148,9 @@ function enforceRuleOne(boid) {
   pc[0] = pc[0] / (boidList.length - 1)
   pc[1] = pc[1] / (boidList.length - 1)
 
-  // divide difference by 100 to move .001% of the way
-  dx = (pc[0] - boid.position[0]) / 10000
-  dy = (pc[1] - boid.position[1]) / 10000
+  // divide difference by 100 to move .xxx% of the way
+  dx = (pc[0] - boid.position[0]) / 5000
+  dy = (pc[1] - boid.position[1]) / 5000
   return [dx, dy]
 }
 
@@ -187,8 +186,8 @@ function enforceRuleThree(boid) {
   console.log(pv)
 
   // divide difference to speed them up smoothly
-  dvx = (pv[0] - boid.velocity[0]) / 8000
-  dvy = (pv[1] - boid.velocity[1]) / 8000
+  dvx = (pv[0] - boid.velocity[0]) / 4000
+  dvy = (pv[1] - boid.velocity[1]) / 4000
 
   return [dvx, dvy]
 }
@@ -237,6 +236,10 @@ function calcEuclid(pos1, pos2) {
   y2 = pos2[1]
 
   return Math.sqrt(Math.pow((x1-y1), 2) + Math.pow((x2-y2), 2))
+}
+
+function getRandomInt(max) {
+  return Math.floor(Math.random() * Math.floor(max));
 }
 
 
