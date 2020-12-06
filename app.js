@@ -5,9 +5,9 @@ http://www.vergenet.net/~conrad/boids/pseudocode.html
 Three rules of boid's algorithm:
 ================================
 
-[1] Boids try to fly towards the center of mass of neighbouring boids
-    -----------------------------------------------------------------
-    - center of mass: average position of all boids
+[1] Boids try to move towards the center of mass of neighbouring boids
+[2] Boids try to keep a small distance away from other objects (including other boids)
+[3] Boids try to match velocity with nearby boids
 
 
 Pure HTML, CSS and JavaScript implementation of boids algorithm,
